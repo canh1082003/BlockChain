@@ -1,50 +1,32 @@
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("addAccount").onclick = function () {
-    showContainer("container-add");
-    showSearch(false);
-  };
-
-  document.getElementById("editAccount").onclick = function () {
-    showContainer("container-list");
-    showSearch(true);
-  };
-});
-
-function showContainer(containerId) {
-  document.getElementById("container-add").style.display = "none";
-  document.getElementById("container-list").style.display = "none";
-  document.getElementById(containerId).style.display = "block";
-}
-
-function showSearch(visible) {
-  document.querySelector(".search").style.display = visible ? "block" : "none";
-}
-
-// Lấy modal và các phần tử trong modal
-const editAccountModal = document.getElementById("editAccountModal");
+// Lấy các modal và nút đóng
+const modals = {
+  edit: document.getElementById("editAccountModal"),
+  add: document.getElementById("addAccountModal"),
+};
 const closeModalBtn = document.querySelector(".close");
 
-// Hàm mở modal form sửa
-function openEditForm() {
-  editAccountModal.style.display = "block";
+// Mở modal theo loại (edit hoặc add)
+function openModal(type) {
+  modals[type].style.display = "block";
 }
 
-// Hàm đóng modal form sửa
-function closeEditForm() {
-  editAccountModal.style.display = "none";
+// Đóng tất cả modal
+function closeModal() {
+  Object.values(modals).forEach((modal) => (modal.style.display = "none"));
 }
 
 // Sự kiện đóng modal khi nhấn vào nút 'x'
-closeModalBtn.onclick = function () {
-  closeEditForm();
-};
+closeModalBtn.onclick = closeModal;
 
 // Đóng modal khi nhấn ngoài modal
 window.onclick = function (event) {
-  if (event.target == editAccountModal) {
-    closeEditForm();
-  }
+  if (Object.values(modals).includes(event.target)) closeModal();
 };
 
-// Sự kiện mở modal khi nhấn vào icon edit
-// document.getElementById("edit").addEventListener("click", openEditForm);
+// Sự kiện mở modal khi nhấn vào các nút hoặc icon
+document
+  .getElementById("edit")
+  .addEventListener("click", () => openModal("edit"));
+document
+  .getElementById("btnShowAdd")
+  .addEventListener("click", () => openModal("add"));
